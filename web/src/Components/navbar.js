@@ -1,4 +1,4 @@
-export default function navbar({ balance }) {
+export default function navbar({ balance, onConnectWallet, isConnected }) {
   return (
     <div class="relative bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
@@ -49,12 +49,15 @@ export default function navbar({ balance }) {
             <p className="text-base font-bold text-indigo-700">
               Balance {balance}
             </p>
-            <a
-              href="#"
-              class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-            >
-              Connect Wallet
-            </a>
+            {!isConnected && (
+              <a
+                href="#"
+                onClick={onConnectWallet}
+                class="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+              >
+                Connect Wallet
+              </a>
+            )}
           </div>
         </div>
 

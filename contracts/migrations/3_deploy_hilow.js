@@ -1,5 +1,7 @@
-const HiLow = artifacts.require('HiLow');
-
+const HiLow = artifacts.require("HiLow");
+const KSNToken = artifacts.require("KSNToken");
 module.exports = async function (deployer) {
-  await deployer.deploy(HiLow, "0xA47C82819fc5B2af0Ec39abbBc2562F86BB2AED2");
+  const ksnToken = await KSNToken.deployed();
+  console.log("ksn token", ksnToken.address);
+  await deployer.deploy(HiLow, ksnToken.address);
 };

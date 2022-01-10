@@ -14,5 +14,8 @@
     "@openzeppelin/test-helpers": "^0.5.15",
     "chai": "^4.3.4",
     "truffle": "^5.4.26"
+  },
+  "dependencies": {
+    "bignumber.js": "^9.0.2"
   }
 }

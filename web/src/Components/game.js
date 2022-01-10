@@ -5,6 +5,7 @@ export default function game({
   setBetType,
   onChangeBetAmount,
   onClickBet,
+  result,
 }) {
   return (
     <main className="flex-1">
@@ -31,7 +32,7 @@ export default function game({
             <div>
               <div className="flex justify-center items-center mb-10">
                 <div id="dice-wrapper">
-                  <Dice cheatValue={betType === "hi" ? 2 : 5} size={80} />
+                  <Dice cheatValue={result} size={80} />
                 </div>
               </div>
 

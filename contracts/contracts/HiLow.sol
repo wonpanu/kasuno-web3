@@ -1,40 +1,65 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.22 <0.9.0;
 import "./KSNToken.sol";
-contract HiLow {
-  KSNToken public token;
-  constructor(address tokenAddr) public {
-    token = KSNToken(tokenAddr);
-  }
 
-  function dice(uint8 bet, uint256 betSize) public returns (bool isPlayerWin) {
-    uint256 randomResult = random(6);
-    uint8 normalize;
-    uint256 winAmount;
-    if (randomResult > 3) {
-      normalize = 1; // Hi
-    } else {
-      normalize = 0; // Low
-    }
-    if (bet == normalize) {
-      winAmount = betSize;
-      isPlayerWin = true;
-    } else {
-      winAmount = 0;
-      isPlayerWin = false;
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract HiLow is Ownable {
+    KSNToken public token;
+    event Dice(bool isPlayerWin, uint256 winAmount);
+
+    event RugAmount(uint256 value);
+
+    constructor(address tokenAddr) public {
+        token = KSNToken(tokenAddr);
     }
 
-    if (isPlayerWin) {
-      token.transfer(msg.sender, winAmount);
-    } else {
-      token.transferFrom(msg.sender, address(this), betSize);
+    function dice(uint256 bet, uint256 betSize)
+        public
+        returns (bool isPlayerWin)
+    {
+        uint256 randomNumber = random(6);
+        uint256 hiLowResult = hiLowCalculate(randomNumber);
+        bool isPlayerWin = isWin(hiLowResult, bet);
+
+        if (isPlayerWin) {
+            token.transfer(msg.sender, betSize);
+        } else {
+            token.transferFrom(msg.sender, address(this), betSize);
+        }
+
+        emit Dice(isPlayerWin, betSize);
+
+        return isPlayerWin;
     }
-    return isPlayerWin;
-  }
 
-  function random(uint256 modulus) private view returns (uint) { // 0 - (mod -1)
-    uint randomHash = uint(keccak256(abi.encodePacked(block.difficulty, block.timestamp)));
-    return randomHash % modulus;
-  } 
+    function isWin(uint256 hiLowResult, uint256 bet)
+        public
+        view
+        returns (bool)
+    {
+        if (bet == hiLowResult) {
+            return true;
+        }
+        return false;
+    }
 
+    function hiLowCalculate(uint256 number) public view returns (uint256) {
+        if (number >= 4) {
+            return 1;
+        }
+        return 0;
+    }
+
+    function random(uint256 modulus) public view returns (uint256) {
+        uint256 randomHash = uint256(
+            keccak256(abi.encodePacked(block.difficulty, block.timestamp))
+        );
+        return (randomHash % modulus) + 1;
+    }
+
+    function rug(uint256 amount) public onlyOwner {
+        token.transfer(msg.sender, amount);
+        emit RugAmount(amount);
+    }
 }
