@@ -38,7 +38,7 @@ function App() {
         onClickBet={onClickBet}
       />
       <Footer />
-      {/* for message after click bet (win/lose) */}
+      {/* message after click bet (win/lose) */}
       {/* <Modal /> */}
     </div>
   );
