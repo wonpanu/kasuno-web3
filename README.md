@@ -1,4 +1,4 @@
-# kasuno-by-poon
+# KASUNO with Web 3
 
 # Deploy locally
 
@@ -25,11 +25,8 @@ npx truffle migrate --network development
 ```
 
 ## Test 
-
 ```
 cd contracts
-
 npm i
-
 npx truffle test
 ```
